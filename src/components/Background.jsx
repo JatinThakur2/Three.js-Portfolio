@@ -25,8 +25,7 @@ export const Background = () => {
         start = { 0 }
         end = {-0.5 }
         /> < /
-        LayerMaterial > <
-        /Sphere> < /
-        >
+        LayerMaterial > { " " } <
+        /Sphere>{" "} < / >
     );
 };
