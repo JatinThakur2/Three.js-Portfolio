@@ -14,8 +14,8 @@ export function Cloud({ opacity, ...props }) {
           {...materials["lambert2SG.001"]}
           transparent
           opacity={opacity}
-        />{" "}
-      </mesh>{" "}
+        />
+      </mesh>
     </group>
   );
 }
