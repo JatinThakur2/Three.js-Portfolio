@@ -5,7 +5,7 @@ import { Cloud } from "@react-three/drei";
 import { useMemo, useRef } from "react";
 import * as THREE from "three";
 
-const LINE_NB_POINTS = 12000;
+const LINE_NB_POINTS = 1200;
 
 export const Experience = () => {
   const curve = useMemo(() => {
@@ -45,13 +45,13 @@ export const Experience = () => {
         />
       </Float>
       {/* LINE */}
-      <line
+      {/* <Line
         points={linePoints}
         color={"white"}
-        opacity={10}
+        opacity={0.8}
         transparent
         lineWidth={200}
-      />
+      /> */}
 
       <Cloud opacity={0.5} scale={[0.3, 0.3, 0.3]} position={[-3, 1, -3]} />
       <Cloud opacity={0.5} scale={[0.2, 0.3, 0.4]} position={[3, -0.5, -2]} />
