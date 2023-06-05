@@ -167,6 +167,7 @@ export const Experience = () => {
           Your are about to Explore My world!
         </Text>
       </group>
+
       {/* LINE */}
       <group position-y={-2}>
         <mesh>
