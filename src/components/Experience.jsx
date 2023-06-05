@@ -163,8 +163,37 @@ export const Experience = () => {
           maxWidth={2.5}
           font={"./fonts/Inter-Regular.ttf"}
         >
-          Thanks a lot for your Time{"\n"}
-          Your are about to Explore My world!
+          I am a UI/UX{"\n"}
+          with 2 years of experience in the IT industry. I have a B.Tech degree
+          in Computer Science and am proficient in a variety of technologies
+        </Text>
+      </group>
+
+      {/* Skills */}
+      <group position={[22, 1, -300]}>
+        <Text
+          color="white"
+          anchorX={"left"}
+          anchorY="center"
+          fontSize={0.52}
+          maxWidth={2.5}
+          font={"./fonts/DMSerifDisplay-Regular.ttf"}
+        >
+          Skills
+        </Text>
+        <Text
+          color="white"
+          anchorX={"left"}
+          anchorY="top"
+          position-y={-0.66}
+          fontSize={0.22}
+          maxWidth={2.5}
+          font={"./fonts/Inter-Regular.ttf"}
+        >
+          I am proficient in a variety of technologies{"\n"}
+          HTML, CSS, JavaScript, React, Appian, Python, Java, Adobe XD, Figma,
+          MySQL, and GitHub I am also a skilled Blender artist and have
+          experience in leadership, time management, and teamwork.
         </Text>
       </group>
 
