@@ -12,7 +12,7 @@ function App() {
           <Experience />
         </ScrollControls>
         <EffectComposer>
-          <Noise opacity={0.1} />
+          <Noise opacity={0.04} />
         </EffectComposer>
       </Canvas>
     </>
