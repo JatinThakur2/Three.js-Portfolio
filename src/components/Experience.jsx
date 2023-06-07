@@ -1,10 +1,9 @@
 import { Float, PerspectiveCamera, useScroll } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
 import { gsap } from "gsap";
-import { useEffect, useLayoutEffect, useMemo, useRef } from "react";
+import { useLayoutEffect, useMemo, useRef } from "react";
 import * as THREE from "three";
 import { Euler, Group, Vector3 } from "three";
-import { usePlay } from "../contexts/Play";
 import { fadeOnBeforeCompile } from "../utils/fadeMaterial";
 import { Airplane } from "./Airplane";
 import { Background } from "./Background";
@@ -33,9 +32,6 @@ export const Experience = () => {
     []
   );
 
-  const sceneOpacity = useRef(0);
-  const lineMaterialRef = useRef();
-
   const curve = useMemo(() => {
     return new THREE.CatmullRomCurve3(curvePoints, false, "catmullrom", 0.5);
   }, []);
@@ -49,7 +45,7 @@ export const Experience = () => {
           curvePoints[1].y,
           curvePoints[1].z
         ),
-        subtitle: `Welcome to Wawatmos,
+        subtitle: `Welcome to My World!,
 Have a seat and enjoy the ride!`,
       },
       {
@@ -59,9 +55,10 @@ Have a seat and enjoy the ride!`,
           curvePoints[2].y,
           curvePoints[2].z
         ),
-        title: "Services",
-        subtitle: `Do you want a drink?
-We have a wide range of beverages!`,
+        title: "About Me",
+        subtitle: ` I am a UI/UX
+        with 2 years of experience in the IT industry. I have a B.Tech degree
+        in Computer Science and am proficient in a variety of technologies`,
       },
       {
         cameraRailDist: -1,
@@ -70,8 +67,11 @@ We have a wide range of beverages!`,
           curvePoints[3].y,
           curvePoints[3].z
         ),
-        title: "Fear of flying?",
-        subtitle: `Our flight attendants will help you have a great journey`,
+        title: "Skills",
+        subtitle: `I am proficient in a variety of technologies
+        HTML, CSS, JavaScript, React, Appian, Python, Java, Adobe XD, Figma,
+        MySQL, and GitHub I am also a skilled Blender artist and have
+        experience in leadership, time management, and teamwork.`,
       },
       {
         cameraRailDist: 1.5,
@@ -80,8 +80,9 @@ We have a wide range of beverages!`,
           curvePoints[4].y,
           curvePoints[4].z - 12
         ),
-        title: "Movies",
-        subtitle: `We provide a large selection of medias, we highly recommend you Porco Rosso during the flight`,
+        title: "My Goals",
+        subtitle: `I am passionate about creating user-centered designs that make a difference in people's lives. 
+        I am always looking for new ways to improve my skills and knowledge in UI/UX design. I am also eager to learn new technologies and tools.`,
       },
     ];
   }, []);
@@ -256,6 +257,15 @@ We have a wide range of beverages!`,
         ),
         rotation: new Euler(Math.PI / 4, Math.PI / 6, 0),
       },
+      {
+        scale: new Vector3(4, 4, 4),
+        position: new Vector3(
+          curvePoints[7].x,
+          curvePoints[7].y,
+          curvePoints[7].z
+        ),
+        rotation: new Euler(0, 0, 0),
+      },
     ],
     []
   );
@@ -270,49 +280,10 @@ We have a wide range of beverages!`,
 
   const cameraGroup = useRef();
   const cameraRail = useRef();
-  const camera = useRef();
   const scroll = useScroll();
   const lastScroll = useRef(0);
 
-  const { play, setHasScroll, end, setEnd } = usePlay();
-
   useFrame((_state, delta) => {
-    if (window.innerWidth > window.innerHeight) {
-      // LANDSCAPE
-      camera.current.fov = 30;
-      camera.current.position.z = 5;
-    } else {
-      // PORTRAIT
-      camera.current.fov = 80;
-      camera.current.position.z = 2;
-    }
-
-    if (lastScroll.current <= 0 && scroll.offset > 0) {
-      setHasScroll(true);
-    }
-
-    if (play && !end && sceneOpacity.current < 1) {
-      sceneOpacity.current = THREE.MathUtils.lerp(
-        sceneOpacity.current,
-        1,
-        delta * 0.1
-      );
-    }
-
-    if (end && sceneOpacity.current > 0) {
-      sceneOpacity.current = THREE.MathUtils.lerp(
-        sceneOpacity.current,
-        0,
-        delta
-      );
-    }
-
-    lineMaterialRef.current.opacity = sceneOpacity.current;
-
-    if (end) {
-      return;
-    }
-
     const scrollOffset = Math.max(0, scroll.offset);
 
     let friction = 1;
@@ -413,14 +384,6 @@ We have a wide range of beverages!`,
       )
     );
     airplane.current.quaternion.slerp(targetAirplaneQuaternion, delta * 2);
-
-    if (
-      cameraGroup.current.position.z <
-      curvePoints[curvePoints.length - 1].z + 100
-    ) {
-      setEnd(true);
-      planeOutTl.current.play();
-    }
   });
 
   const airplane = useRef();
@@ -430,9 +393,6 @@ We have a wide range of beverages!`,
     colorA: "#3535cc",
     colorB: "#abaadd",
   });
-
-  const planeInTl = useRef();
-  const planeOutTl = useRef();
 
   useLayoutEffect(() => {
     tl.current = gsap.timeline();
@@ -454,106 +414,59 @@ We have a wide range of beverages!`,
     });
 
     tl.current.pause();
-
-    planeInTl.current = gsap.timeline();
-    planeInTl.current.pause();
-    planeInTl.current.from(airplane.current.position, {
-      duration: 3,
-      z: 5,
-      y: -2,
-    });
-
-    planeOutTl.current = gsap.timeline();
-    planeOutTl.current.pause();
-
-    planeOutTl.current.to(
-      airplane.current.position,
-      {
-        duration: 10,
-        z: -250,
-        y: 10,
-      },
-      0
-    );
-    planeOutTl.current.to(
-      cameraRail.current.position,
-      {
-        duration: 8,
-        y: 12,
-      },
-      0
-    );
-    planeOutTl.current.to(airplane.current.position, {
-      duration: 1,
-      z: -1000,
-    });
   }, []);
 
-  useEffect(() => {
-    if (play) {
-      planeInTl.current.play();
-    }
-  }, [play]);
-
-  return useMemo(
-    () => (
-      <>
-        <directionalLight position={[0, 3, 1]} intensity={0.1} />
-        {/* <OrbitControls /> */}
-        <group ref={cameraGroup}>
-          <Background backgroundColors={backgroundColors} />
-          <group ref={cameraRail}>
-            <PerspectiveCamera
-              ref={camera}
-              position={[0, 0, 5]}
-              fov={30}
-              makeDefault
-            />
-          </group>
-          <group ref={airplane}>
-            <Float floatIntensity={1} speed={1.5} rotationIntensity={0.5}>
-              <Airplane
-                rotation-y={Math.PI / 2}
-                scale={[0.2, 0.2, 0.2]}
-                position-y={0.1}
-              />
-            </Float>
-          </group>
+  return (
+    <>
+      <directionalLight position={[0, 3, 1]} intensity={0.1} />
+      {/* <OrbitControls /> */}
+      <group ref={cameraGroup}>
+        <Background backgroundColors={backgroundColors} />
+        <group ref={cameraRail}>
+          <PerspectiveCamera position={[0, 0, 5]} fov={30} makeDefault />
         </group>
-        {/* TEXT */}
-        {textSections.map((textSection, index) => (
-          <TextSection {...textSection} key={index} />
-        ))}
-
-        {/* LINE */}
-        <group position-y={-2}>
-          <mesh>
-            <extrudeGeometry
-              args={[
-                shape,
-                {
-                  steps: LINE_NB_POINTS,
-                  bevelEnabled: false,
-                  extrudePath: curve,
-                },
-              ]}
+        <group ref={airplane}>
+          <Float floatIntensity={1} speed={1.5} rotationIntensity={0.5}>
+            <Airplane
+              rotation-y={Math.PI / 2}
+              scale={[0.2, 0.2, 0.2]}
+              position-y={0.1}
             />
-            <meshStandardMaterial
-              color={"white"}
-              ref={lineMaterialRef}
-              transparent
-              envMapIntensity={2}
-              onBeforeCompile={fadeOnBeforeCompile}
-            />
-          </mesh>
+          </Float>
         </group>
+      </group>
+      {/* TEXT */}
+      {textSections.map((textSection, index) => (
+        <TextSection {...textSection} key={index} />
+      ))}
 
-        {/* CLOUDS */}
-        {clouds.map((cloud, index) => (
-          <Cloud sceneOpacity={sceneOpacity} {...cloud} key={index} />
-        ))}
-      </>
-    ),
-    []
+      {/* LINE */}
+      <group position-y={-2}>
+        <mesh>
+          <extrudeGeometry
+            args={[
+              shape,
+              {
+                steps: LINE_NB_POINTS,
+                bevelEnabled: false,
+                extrudePath: curve,
+              },
+            ]}
+          />
+          <meshStandardMaterial
+            color={"white"}
+            opacity={1}
+            transparent
+            envMapIntensity={2}
+            onBeforeCompile={fadeOnBeforeCompile}
+          />
+        </mesh>
+      </group>
+
+      {/* CLOUDS */}
+      {clouds.map((cloud, index) => (
+        <Cloud {...cloud} key={index} />
+      ))}
+    </>
   );
 };
