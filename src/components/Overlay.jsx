@@ -15,7 +15,7 @@ export const Overlay = () => {
       {progress === 100 && (
         <div className={`intro ${play ? "intro--disappear" : ""}`}>
           <h1 className="logo">
-            JATIN
+            JATIN THAKUR{" "}
             <div className="spinner">
               <div className="spinner__image" />
             </div>
@@ -32,7 +32,7 @@ export const Overlay = () => {
         </div>
       )}
       <div className={`outro ${end ? "outro--appear" : ""}`}>
-        <p className="outro__text">Wish you had a great flight with me...</p>
+        <p className="outro__text">Wish you had a great flight with us...</p>
       </div>
     </div>
   );

@@ -1,9 +1,10 @@
 import { Float, PerspectiveCamera, useScroll } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
 import { gsap } from "gsap";
-import { useLayoutEffect, useMemo, useRef } from "react";
+import { useEffect, useLayoutEffect, useMemo, useRef } from "react";
 import * as THREE from "three";
 import { Euler, Group, Vector3 } from "three";
+import { usePlay } from "../contexts/Play";
 import { fadeOnBeforeCompile } from "../utils/fadeMaterial";
 import { Airplane } from "./Airplane";
 import { Background } from "./Background";
@@ -32,6 +33,9 @@ export const Experience = () => {
     []
   );
 
+  const sceneOpacity = useRef(0);
+  const lineMaterialRef = useRef();
+
   const curve = useMemo(() => {
     return new THREE.CatmullRomCurve3(curvePoints, false, "catmullrom", 0.5);
   }, []);
@@ -57,9 +61,7 @@ I Hope you will have a fun ride with me`,
           curvePoints[2].z
         ),
         title: "About Me",
-        subtitle: ` I am a UI/UX
-        with 2 years of experience in the IT industry. I have a B.Tech degree
-        in Computer Science and am proficient in a variety of technologies`,
+        subtitle: ` I am a UI/UX with 2 years of experience in the IT industry. I have a B.Tech degree in Computer Science and am proficient in a variety of technologies`,
       },
       {
         cameraRailDist: -1,
@@ -69,10 +71,7 @@ I Hope you will have a fun ride with me`,
           curvePoints[3].z
         ),
         title: "Skills",
-        subtitle: `I am proficient in a variety of technologies
-        HTML, CSS, JavaScript, React, Appian, Python, Java, Adobe XD, Figma,
-        MySQL, and GitHub I am also a skilled Blender artist and have
-        experience in leadership, time management, and teamwork.`,
+        subtitle: `I am proficient in a variety of technologies HTML, CSS, JavaScript, React, Appian, Python, Java, Adobe XD, Figma, MySQL, and GitHub I am also a skilled Blender artist and have experience in leadership, time management, and teamwork.`,
       },
       {
         cameraRailDist: 1.5,
@@ -82,8 +81,7 @@ I Hope you will have a fun ride with me`,
           curvePoints[4].z - 12
         ),
         title: "My Goals",
-        subtitle: `I am passionate about creating user-centered designs that make a difference in people's lives. 
-        I am always looking for new ways to improve my skills and knowledge in UI/UX design. I am also eager to learn new technologies and tools.`,
+        subtitle: `I am passionate about creating user-centered designs that make a difference in people's lives. I am always looking for new ways to improve my skills and knowledge in UI/UX design. I am also eager to learn new technologies and tools.`,
       },
     ];
   }, []);
@@ -258,15 +256,6 @@ I Hope you will have a fun ride with me`,
         ),
         rotation: new Euler(Math.PI / 4, Math.PI / 6, 0),
       },
-      {
-        scale: new Vector3(4, 4, 4),
-        position: new Vector3(
-          curvePoints[7].x,
-          curvePoints[7].y,
-          curvePoints[7].z
-        ),
-        rotation: new Euler(0, 0, 0),
-      },
     ],
     []
   );
@@ -281,10 +270,49 @@ I Hope you will have a fun ride with me`,
 
   const cameraGroup = useRef();
   const cameraRail = useRef();
+  const camera = useRef();
   const scroll = useScroll();
   const lastScroll = useRef(0);
 
+  const { play, setHasScroll, end, setEnd } = usePlay();
+
   useFrame((_state, delta) => {
+    if (window.innerWidth > window.innerHeight) {
+      // LANDSCAPE
+      camera.current.fov = 30;
+      camera.current.position.z = 5;
+    } else {
+      // PORTRAIT
+      camera.current.fov = 80;
+      camera.current.position.z = 2;
+    }
+
+    if (lastScroll.current <= 0 && scroll.offset > 0) {
+      setHasScroll(true);
+    }
+
+    if (play && !end && sceneOpacity.current < 1) {
+      sceneOpacity.current = THREE.MathUtils.lerp(
+        sceneOpacity.current,
+        1,
+        delta * 0.1
+      );
+    }
+
+    if (end && sceneOpacity.current > 0) {
+      sceneOpacity.current = THREE.MathUtils.lerp(
+        sceneOpacity.current,
+        0,
+        delta
+      );
+    }
+
+    lineMaterialRef.current.opacity = sceneOpacity.current;
+
+    if (end) {
+      return;
+    }
+
     const scrollOffset = Math.max(0, scroll.offset);
 
     let friction = 1;
@@ -385,6 +413,14 @@ I Hope you will have a fun ride with me`,
       )
     );
     airplane.current.quaternion.slerp(targetAirplaneQuaternion, delta * 2);
+
+    if (
+      cameraGroup.current.position.z <
+      curvePoints[curvePoints.length - 1].z + 100
+    ) {
+      setEnd(true);
+      planeOutTl.current.play();
+    }
   });
 
   const airplane = useRef();
@@ -394,6 +430,9 @@ I Hope you will have a fun ride with me`,
     colorA: "#3535cc",
     colorB: "#abaadd",
   });
+
+  const planeInTl = useRef();
+  const planeOutTl = useRef();
 
   useLayoutEffect(() => {
     tl.current = gsap.timeline();
@@ -415,59 +454,106 @@ I Hope you will have a fun ride with me`,
     });
 
     tl.current.pause();
+
+    planeInTl.current = gsap.timeline();
+    planeInTl.current.pause();
+    planeInTl.current.from(airplane.current.position, {
+      duration: 3,
+      z: 5,
+      y: -2,
+    });
+
+    planeOutTl.current = gsap.timeline();
+    planeOutTl.current.pause();
+
+    planeOutTl.current.to(
+      airplane.current.position,
+      {
+        duration: 10,
+        z: -250,
+        y: 10,
+      },
+      0
+    );
+    planeOutTl.current.to(
+      cameraRail.current.position,
+      {
+        duration: 8,
+        y: 12,
+      },
+      0
+    );
+    planeOutTl.current.to(airplane.current.position, {
+      duration: 1,
+      z: -1000,
+    });
   }, []);
 
-  return (
-    <>
-      <directionalLight position={[0, 3, 1]} intensity={0.1} />
-      {/* <OrbitControls /> */}
-      <group ref={cameraGroup}>
-        <Background backgroundColors={backgroundColors} />
-        <group ref={cameraRail}>
-          <PerspectiveCamera position={[0, 0, 5]} fov={30} makeDefault />
-        </group>
-        <group ref={airplane}>
-          <Float floatIntensity={1} speed={1.5} rotationIntensity={0.5}>
-            <Airplane
-              rotation-y={Math.PI / 2}
-              scale={[0.2, 0.2, 0.2]}
-              position-y={0.1}
+  useEffect(() => {
+    if (play) {
+      planeInTl.current.play();
+    }
+  }, [play]);
+
+  return useMemo(
+    () => (
+      <>
+        <directionalLight position={[0, 3, 1]} intensity={0.1} />
+        {/* <OrbitControls /> */}
+        <group ref={cameraGroup}>
+          <Background backgroundColors={backgroundColors} />
+          <group ref={cameraRail}>
+            <PerspectiveCamera
+              ref={camera}
+              position={[0, 0, 5]}
+              fov={30}
+              makeDefault
             />
-          </Float>
+          </group>
+          <group ref={airplane}>
+            <Float floatIntensity={1} speed={1.5} rotationIntensity={0.5}>
+              <Airplane
+                rotation-y={Math.PI / 2}
+                scale={[0.2, 0.2, 0.2]}
+                position-y={0.1}
+              />
+            </Float>
+          </group>
         </group>
-      </group>
-      {/* TEXT */}
-      {textSections.map((textSection, index) => (
-        <TextSection {...textSection} key={index} />
-      ))}
+        {/* TEXT */}
+        {textSections.map((textSection, index) => (
+          <TextSection {...textSection} key={index} />
+        ))}
 
-      {/* LINE */}
-      <group position-y={-2}>
-        <mesh>
-          <extrudeGeometry
-            args={[
-              shape,
-              {
-                steps: LINE_NB_POINTS,
-                bevelEnabled: false,
-                extrudePath: curve,
-              },
-            ]}
-          />
-          <meshStandardMaterial
-            color={"white"}
-            opacity={1}
-            transparent
-            envMapIntensity={2}
-            onBeforeCompile={fadeOnBeforeCompile}
-          />
-        </mesh>
-      </group>
+        {/* LINE */}
+        <group position-y={-2}>
+          <mesh>
+            <extrudeGeometry
+              args={[
+                shape,
+                {
+                  steps: LINE_NB_POINTS,
+                  bevelEnabled: false,
+                  extrudePath: curve,
+                },
+              ]}
+            />
+            <meshStandardMaterial
+              color={"white"}
+              ref={lineMaterialRef}
+              transparent
+              envMapIntensity={2}
+              onBeforeCompile={fadeOnBeforeCompile}
+            />
+          </mesh>
+        </group>
 
-      {/* CLOUDS */}
-      {clouds.map((cloud, index) => (
-        <Cloud {...cloud} key={index} />
-      ))}
-    </>
+        {/* CLOUDS */}
+        {clouds.map((cloud, index) => (
+          <Cloud sceneOpacity={sceneOpacity} {...cloud} key={index} />
+        ))}
+      </>
+    ),
+    []
   );
 };
