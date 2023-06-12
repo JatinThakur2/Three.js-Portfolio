@@ -71,11 +71,32 @@ body {
   animation: fadeUp 2.4s ease-in-out;
   transition: all 2s ease-in-out;
 }
-
 .intro--disappear .logo {
   top: 42px;
   transform: scale(0.25);
   transform-origin: center top;
+}
+
+.about {
+  font-family: "DM Serif Display", serif;
+  color: white;
+  font-size: 1rem;
+  letter-spacing: 0.5rem;
+  padding: 0;
+  margin: 0;
+  top: 42px;
+  right: 16px;
+  /* transform: translateY(-50%); */
+  position: absolute;
+  top: 50vh;
+  animation: fadeOut 2.4s ease-in-out;
+  transition: all 2s ease-in-out;
+}
+
+.intro--disappear .about {
+  top: 42px;
+  transform: scale(0.25);
+  transform-origin: center right;
 }
 
 .spinner {

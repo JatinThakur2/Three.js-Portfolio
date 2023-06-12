@@ -12,6 +12,7 @@ export const Overlay = () => {
       <div
         className={`loader ${progress === 100 ? "loader--disappear" : ""}`}
       />
+
       {progress === 100 && (
         <div className={`intro ${play ? "intro--disappear" : ""}`}>
           <h1 className="logo">
@@ -20,6 +21,7 @@ export const Overlay = () => {
               <div className="spinner__image" />
             </div>
           </h1>
+
           <p className="intro__scroll">Scroll to begin the journey</p>
           <button
             className="explore"
@@ -32,7 +34,7 @@ export const Overlay = () => {
         </div>
       )}
       <div className={`outro ${end ? "outro--appear" : ""}`}>
-        <p className="outro__text">Wish you had a great flight with us...</p>
+        <p className="outro__text">Wish you had a great flight with me...</p>
       </div>
     </div>
   );
