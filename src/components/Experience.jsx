@@ -83,6 +83,16 @@ I Hope you will have a fun ride with me`,
         title: "My Goals",
         subtitle: `I am passionate about creating user-centered designs that make a difference in people's lives. I am always looking for new ways to improve my skills and knowledge in UI/UX design. I am also eager to learn new technologies and tools.`,
       },
+      {
+        cameraRailDist: 1.5,
+        position: new Vector3(
+          curvePoints[4].x + 3.5,
+          curvePoints[4].y,
+          curvePoints[4].z - 12
+        ),
+        title: "My Goals",
+        subtitle: `I am passionate about creating user-centered designs that make a difference in people's lives. I am always looking for new ways to improve my skills and knowledge in UI/UX design. I am also eager to learn new technologies and tools.`,
+      },
     ];
   }, []);
 
