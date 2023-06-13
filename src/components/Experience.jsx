@@ -84,14 +84,15 @@ I Hope you will have a fun ride with me`,
         subtitle: `I am passionate about creating user-centered designs that make a difference in people's lives. I am always looking for new ways to improve my skills and knowledge in UI/UX design. I am also eager to learn new technologies and tools.`,
       },
       {
-        cameraRailDist: 1.5,
+        cameraRailDist: -1,
         position: new Vector3(
-          curvePoints[4].x + 3.5,
-          curvePoints[4].y,
-          curvePoints[4].z - 12
+          curvePoints[5].x - 3,
+          curvePoints[5].y,
+          curvePoints[5].z
         ),
-        title: "My Goals",
-        subtitle: `I am passionate about creating user-centered designs that make a difference in people's lives. I am always looking for new ways to improve my skills and knowledge in UI/UX design. I am also eager to learn new technologies and tools.`,
+        subtitle: `Welcome to My World!,
+Have a seat and enjoy the ride!
+I Hope you will have a fun ride with me`,
       },
     ];
   }, []);
@@ -246,6 +247,24 @@ I Hope you will have a fun ride with me`,
           curvePoints[4].z - 62
         ),
         rotation: new Euler(Math.PI / 3, 0, Math.PI / 3),
+      },
+      // five
+      {
+        scale: new Vector3(2, 2, 2),
+        position: new Vector3(
+          curvePoints[5].x + 2,
+          curvePoints[5].y + 4,
+          curvePoints[5].z - 26
+        ),
+      },
+      {
+        scale: new Vector3(4, 4, 4),
+        position: new Vector3(
+          curvePoints[5].x + 12,
+          curvePoints[5].y + 6,
+          curvePoints[5].z - 86
+        ),
+        rotation: new Euler(Math.PI / 4, 0, Math.PI / 3),
       },
       // FINAL
       {
