@@ -12,6 +12,8 @@
     "@react-three/drei": "^9.56.28",
     "@react-three/fiber": "^8.11.5",
     "@react-three/postprocessing": "^2.7.1",
+    "firebase-admin": "^11.9.0",
+    "firebase-functions": "^4.4.1",
     "gsap": "^3.11.5",
     "lamina": "^1.1.23",
     "react": "^18.2.0",
