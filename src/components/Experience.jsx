@@ -90,9 +90,10 @@ I Hope you will have a fun ride with me`,
           curvePoints[5].y,
           curvePoints[5].z
         ),
-        subtitle: `Welcome to My World!,
-Have a seat and enjoy the ride!
-I Hope you will have a fun ride with me`,
+        title: "Education",
+        subtitle: `Started my journey from DAV SSS Mandi,
+and after that went to MMDU for my bachelor's in Software Development,
+after completing bachelor's i want to keep this learning journey going on`,
       },
     ];
   }, []);
