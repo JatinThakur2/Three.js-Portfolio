@@ -9,6 +9,7 @@ import { fadeOnBeforeCompile } from "../utils/fadeMaterial";
 import { Airplane } from "./Airplane";
 import { Background } from "./Background";
 import { Cloud } from "./Cloud";
+import { Speed } from "./Speed";
 import { TextSection } from "./TextSection";
 
 const LINE_NB_POINTS = 1000;
@@ -49,9 +50,7 @@ export const Experience = () => {
           curvePoints[1].y,
           curvePoints[1].z
         ),
-        subtitle: `Welcome to My World!,
-Have a seat and enjoy the ride!
-I Hope you will have a fun ride with me`,
+        subtitle: `Welcome to My World!, Have a seat and enjoy the ride!`,
       },
       {
         cameraRailDist: 1.5,
@@ -248,24 +247,6 @@ after completing bachelor's i want to keep this learning journey going on`,
           curvePoints[4].z - 62
         ),
         rotation: new Euler(Math.PI / 3, 0, Math.PI / 3),
-      },
-      // five
-      {
-        scale: new Vector3(2, 2, 2),
-        position: new Vector3(
-          curvePoints[5].x + 2,
-          curvePoints[5].y + 4,
-          curvePoints[5].z - 26
-        ),
-      },
-      {
-        scale: new Vector3(4, 4, 4),
-        position: new Vector3(
-          curvePoints[5].x + 12,
-          curvePoints[5].y + 6,
-          curvePoints[5].z - 86
-        ),
-        rotation: new Euler(Math.PI / 4, 0, Math.PI / 3),
       },
       // FINAL
       {
@@ -469,13 +450,13 @@ after completing bachelor's i want to keep this learning journey going on`,
 
     tl.current.to(backgroundColors.current, {
       duration: 1,
-      colorA: "#6f35cc",
+      colorA: "#3535cc",
       colorB: "#ffad30",
     });
     tl.current.to(backgroundColors.current, {
       duration: 1,
       colorA: "#424242",
-      colorB: "#ffcc00",
+      colorB: "#ffad30",
     });
     tl.current.to(backgroundColors.current, {
       duration: 1,
@@ -529,8 +510,8 @@ after completing bachelor's i want to keep this learning journey going on`,
     () => (
       <>
         <directionalLight position={[0, 3, 1]} intensity={0.1} />
-        {/* <OrbitControls /> */}
         <group ref={cameraGroup}>
+          <Speed />
           <Background backgroundColors={backgroundColors} />
           <group ref={cameraRail}>
             <PerspectiveCamera
